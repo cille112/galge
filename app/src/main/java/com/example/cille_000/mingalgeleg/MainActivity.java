@@ -8,9 +8,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import java.util.ArrayList;
 
-import static com.example.cille_000.galge.R.id.editText;
 
 public class MainActivity extends AppCompatActivity {
 
