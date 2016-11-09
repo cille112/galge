@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MinGalgeleg</string>
+    <string name="Prefrence_file_key">com.example.cille_000.mingalgeleg.PREFERENCE_FILE_KEY</string>
 </resources>

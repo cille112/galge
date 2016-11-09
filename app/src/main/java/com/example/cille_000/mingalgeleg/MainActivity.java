@@ -1,5 +1,8 @@
 package com.example.cille_000.mingalgeleg;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,20 +16,36 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
+    private Galgelogik logik = new Galgelogik();
+    private TextView ord;
+    private TextView bogstaver;
+    private EditText bogstav;
+    private Button guess;
+    private ImageView picture;
+    private TextView vel;
+    private SharedPreferences sharedPref;
+    private SharedPreferences.Editor editor;
+    private int i;
+    private int o;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Galgelogik logik = new Galgelogik();
-        final TextView ord = (TextView) findViewById(R.id.textView2);
-        final TextView bogstaver = (TextView) findViewById(R.id.textView8);
-        final EditText bogstav = (EditText) findViewById(R.id.editText);
-        final Button guess = (Button) findViewById(R.id.button);
-        final ImageView picture = (ImageView) findViewById(R.id.imageView);
-        final TextView vel = (TextView) findViewById(R.id.textView);
+
+        ord = (TextView) findViewById(R.id.textView2);
+        bogstaver = (TextView) findViewById(R.id.textView8);
+        bogstav = (EditText) findViewById(R.id.editText);
+        guess = (Button) findViewById(R.id.button);
+        picture = (ImageView) findViewById(R.id.imageView);
+        vel = (TextView) findViewById(R.id.textView);
+
+        sharedPref = getSharedPreferences(getString(R.string.Prefrence_file_key), Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
 
         ord.setText(logik.getSynligtOrd());
+        i = sharedPref.getInt("alt", 0);
+        o = sharedPref.getInt("vundet", 0);
 
         bogstav.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,18 +88,24 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else if(logik.getAntalForkerteBogstaver()==6) {
                         picture.setImageResource(R.drawable.forkert6);
-                        vel.setText("Spillet er slut og du har tabt");
+                        editor.putString("state", "Desværre du tabte spillet").commit();
+                        i=i+1;
+                        editor.putInt("alt", i).commit();
+                        Intent intent = new Intent(MainActivity.this, Restart.class);
+                        MainActivity.this.startActivity(intent);
                     }
                     if(logik.erSpilletVundet()){
-                        vel.setText("Tillykke du gættede ordet!");
+                        editor.putString("state", "Tilykke du vandt spillet").commit();
+                        i=i+1;
+                        o=o+1;
+                        editor.putInt("alt", i).commit();
+                        editor.putInt("vundet", o).commit();
+                        Intent intent = new Intent(MainActivity.this, Restart.class);
+                        MainActivity.this.startActivity(intent);
+
                     }
                 }
             }
         });
-
-
-
-
-
     }
 }
