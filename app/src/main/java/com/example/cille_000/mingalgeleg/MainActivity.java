@@ -3,6 +3,7 @@ package com.example.cille_000.mingalgeleg;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -43,9 +44,26 @@ public class MainActivity extends AppCompatActivity {
         sharedPref = getSharedPreferences(getString(R.string.Prefrence_file_key), Context.MODE_PRIVATE);
         editor = sharedPref.edit();
 
-        ord.setText(logik.getSynligtOrd());
-        i = sharedPref.getInt("alt", 0);
-        o = sharedPref.getInt("vundet", 0);
+        new AsyncTask(){
+            @Override
+            protected Object doInBackground(Object... arg0) {
+                try {
+                    logik.hentOrdFraDr();
+                    return "Ordene blev korrekt hentet fra DR's server";
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return "Ordene blev ikke hentet korrekt: "+e;
+                }
+            }
+            @Override
+            protected void onPostExecute(Object resultat) {
+                ord.setText(logik.getSynligtOrd());
+                i = sharedPref.getInt("alt", 0);
+                o = sharedPref.getInt("vundet", 0);
+            }
+        }.execute();
+
+
 
         bogstav.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
                 bogstav.setText("");
             }
         });
+
+
+
 
         guess.setOnClickListener(new View.OnClickListener() {
             @Override

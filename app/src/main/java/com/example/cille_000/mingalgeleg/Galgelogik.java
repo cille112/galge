@@ -54,15 +54,7 @@ public class Galgelogik {
 
 
     public Galgelogik() {
-        muligeOrd.add("bil");
-        muligeOrd.add("computer");
-        muligeOrd.add("programmering");
-        muligeOrd.add("motorvej");
-        muligeOrd.add("busrute");
-        muligeOrd.add("gangsti");
-        muligeOrd.add("skovsnegl");
-        muligeOrd.add("solsort");
-        nulstil();
+
     }
 
     public void nulstil() {
@@ -140,6 +132,11 @@ public class Galgelogik {
                 replaceAll("<.+?>", " ").toLowerCase().replaceAll("[^a-zæøå]", " ").
                 replaceAll(" [a-zæøå] "," "). // fjern 1-bogstavsord
                 replaceAll(" [a-zæøå][a-zæøå] "," "); // fjern 2-bogstavsord
+
+        data = data.replaceAll("<.+?>", " ").toLowerCase().replaceAll("[^a-zæøå]", " ");
+        System.out.println("data = " + data);
+        muligeOrd.clear();
+        muligeOrd.addAll(new HashSet<String>(Arrays.asList(data.split(" "))));
 
         System.out.println("muligeOrd = " + muligeOrd);
         nulstil();
