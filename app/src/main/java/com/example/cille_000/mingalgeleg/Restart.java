@@ -33,7 +33,7 @@ public class Restart extends AppCompatActivity {
         knap.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Restart.this, MainActivity.class);
+                Intent intent = new Intent(Restart.this, ShowWords.class);
                 Restart.this.startActivity(intent);
             }
         }));

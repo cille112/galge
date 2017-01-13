@@ -21,7 +21,7 @@ public class Start_screen extends AppCompatActivity {
         start.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Start_screen.this, MainActivity.class);
+                Intent intent = new Intent(Start_screen.this, ShowWords.class);
                 Start_screen.this.startActivity(intent);
             }
         });

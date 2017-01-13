@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
-    private Galgelogik logik = new Galgelogik();
+    private Galgelogik logik;
     private TextView ord;
     private TextView bogstaver;
     private EditText bogstav;
@@ -26,13 +26,17 @@ public class MainActivity extends AppCompatActivity {
     private TextView vel;
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor editor;
-    private int i;
-    private int o;
+    private int total;
+    private int wins;
+    private String ordet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        ordet = intent.getStringExtra("Word");
 
         ord = (TextView) findViewById(R.id.textView2);
         bogstaver = (TextView) findViewById(R.id.textView8);
@@ -40,28 +44,15 @@ public class MainActivity extends AppCompatActivity {
         guess = (Button) findViewById(R.id.button);
         picture = (ImageView) findViewById(R.id.imageView);
         vel = (TextView) findViewById(R.id.textView);
+        logik = new Galgelogik();
+        logik.setOrdet(ordet);
+
+        ord.setText(logik.getSynligtOrd());
 
         sharedPref = getSharedPreferences(getString(R.string.Prefrence_file_key), Context.MODE_PRIVATE);
         editor = sharedPref.edit();
 
-        new AsyncTask(){
-            @Override
-            protected Object doInBackground(Object... arg0) {
-                try {
-                    logik.hentOrdFraDr();
-                    return "Ordene blev korrekt hentet fra DR's server";
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return "Ordene blev ikke hentet korrekt: "+e;
-                }
-            }
-            @Override
-            protected void onPostExecute(Object resultat) {
-                ord.setText(logik.getSynligtOrd());
-                i = sharedPref.getInt("alt", 0);
-                o = sharedPref.getInt("vundet", 0);
-            }
-        }.execute();
+
 
 
 
@@ -110,17 +101,20 @@ public class MainActivity extends AppCompatActivity {
                     else if(logik.getAntalForkerteBogstaver()==6) {
                         picture.setImageResource(R.drawable.forkert6);
                         editor.putString("state", "Desværre du tabte spillet").commit();
-                        i=i+1;
-                        editor.putInt("alt", i).commit();
+                        int times = sharedPref.getInt("alt", 0);
+                        total=times+1;
+                        editor.putInt("alt", total).commit();
                         Intent intent = new Intent(MainActivity.this, Restart.class);
                         MainActivity.this.startActivity(intent);
                     }
                     if(logik.erSpilletVundet()){
                         editor.putString("state", "Tilykke du vandt spillet").commit();
-                        i=i+1;
-                        o=o+1;
-                        editor.putInt("alt", i).commit();
-                        editor.putInt("vundet", o).commit();
+                        int times = sharedPref.getInt("alt", 0);
+                        total=times+1;
+                        int win = sharedPref.getInt("vundet", 0);
+                        wins=win+1;
+                        editor.putInt("alt", total).commit();
+                        editor.putInt("vundet", wins).commit();
                         Intent intent = new Intent(MainActivity.this, Restart.class);
                         MainActivity.this.startActivity(intent);
 

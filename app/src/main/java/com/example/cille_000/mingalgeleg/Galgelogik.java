@@ -32,6 +32,13 @@ public class Galgelogik {
         return ordet;
     }
 
+    public void setOrdet(String ord){
+        ordet = ord;
+        opdaterSynligtOrd();
+    }
+
+    public ArrayList<String> getList(){ return muligeOrd;}
+
     public int getAntalForkerteBogstaver() {
         return antalForkerteBogstaver;
     }
@@ -65,7 +72,6 @@ public class Galgelogik {
         ordet = muligeOrd.get(new Random().nextInt(muligeOrd.size()));
         opdaterSynligtOrd();
     }
-
 
     private void opdaterSynligtOrd() {
         synligtOrd = "";
@@ -111,7 +117,6 @@ public class Galgelogik {
         if (spilletErVundet) System.out.println("- SPILLET ER VUNDET");
         System.out.println("---------- ");
     }
-
 
     public static String hentUrl(String url) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
